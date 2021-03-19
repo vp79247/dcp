@@ -7,6 +7,7 @@ import sys
 import glob
 import h5py
 import numpy as np
+import pandas as pd
 from scipy.spatial.transform import Rotation
 from torch.utils.data import Dataset
 
@@ -121,6 +122,11 @@ class ModelNet40(Dataset):
         return pointcloud1.astype('float32'), pointcloud2.astype('float32'), R_ab.astype('float32'), \
                translation_ab.astype('float32'), R_ba.astype('float32'), translation_ba.astype('float32'), \
                euler_ab.astype('float32'), euler_ba.astype('float32')
+        DF_1=pd.DataFrame(pointcloud1)
+        DF_2=pd.DataFrame(pointcloud2)
+        DF_1.to_csv("pointcloud1.csv")
+        DF_2.to_csv("pointcloud2.csv")
+        
 
     def __len__(self):
         return self.data.shape[0]
