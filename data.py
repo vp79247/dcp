@@ -18,8 +18,8 @@ def download():
     DATA_DIR = os.path.join(BASE_DIR, 'data')
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
-    if not os.path.exists(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048')):
-        www = 'https://shapenet.cs.stanford.edu/media/modelnet40_ply_hdf5_2048.zip'
+    if not os.path.exists(os.path.join(DATA_DIR, 'ModelNet10')):
+        www = 'http://3dvision.princeton.edu/projects/2014/3DShapeNets/ModelNet10.zip'
         zipfile = os.path.basename(www)
         os.system('wget --no-check-certificate %s; unzip %s' % (www, zipfile))
         os.system('mv %s %s' % (zipfile[:-4], DATA_DIR))
@@ -32,7 +32,7 @@ def load_data(partition):
     DATA_DIR = os.path.join(BASE_DIR, 'data')
     all_data = []
     all_label = []
-    for h5_name in glob.glob(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048', 'ply_data_%s*.h5' % partition)):
+    for h5_name in glob.glob(os.path.join(DATA_DIR, 'ModelNet10', 'ply_data_%s*.h5' % partition)):
         f = h5py.File(h5_name)
         data = f['data'][:].astype('float32')
         label = f['label'][:].astype('int64')
@@ -58,7 +58,7 @@ def jitter_pointcloud(pointcloud, sigma=0.01, clip=0.05):
     return pointcloud
 
 
-class ModelNet40(Dataset):
+class ModelNet10(Dataset):
     def __init__(self, num_points, partition='train', gaussian_noise=False, unseen=False, factor=4):
         self.data, self.label = load_data(partition)
         self.num_points = num_points
@@ -127,8 +127,8 @@ class ModelNet40(Dataset):
 
 
 if __name__ == '__main__':
-    train = ModelNet40(1024)
-    test = ModelNet40(1024, 'test')
+    train = ModelNet10(1024)
+    test = ModelNet10(1024, 'test')
     for data in train:
         print(len(data))
         break
