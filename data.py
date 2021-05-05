@@ -41,6 +41,8 @@ def load_data(partition):
         all_label.append(label)
     all_data = np.concatenate(all_data, axis=0)
     all_label = np.concatenate(all_label, axis=0)
+    np.save('all_data.npy',all_data)
+    np.save('all_label.npy',all_label)
     return all_data, all_label
 
 
@@ -49,12 +51,15 @@ def translate_pointcloud(pointcloud):
     xyz2 = np.random.uniform(low=-0.2, high=0.2, size=[3])
 
     translated_pointcloud = np.add(np.multiply(pointcloud, xyz1), xyz2).astype('float32')
+    np.save('translated_pointcloud.npy',translated_pointcloud)
+    
     return translated_pointcloud
 
 
 def jitter_pointcloud(pointcloud, sigma=0.01, clip=0.05):
     N, C = pointcloud.shape
     pointcloud += np.clip(sigma * np.random.randn(N, C), -1 * clip, clip)
+    np.save('pointcloud.npy',pointcloud)
     return pointcloud
 
 
@@ -117,6 +122,8 @@ class ModelNet40(Dataset):
 
         pointcloud1 = np.random.permutation(pointcloud1.T).T
         pointcloud2 = np.random.permutation(pointcloud2.T).T
+        np.save('pointcloud1.npy',pointcloud1)
+        np.save('pointcloud2.npy',pointcloud2)
 
         return pointcloud1.astype('float32'), pointcloud2.astype('float32'), R_ab.astype('float32'), \
                translation_ab.astype('float32'), R_ba.astype('float32'), translation_ba.astype('float32'), \
