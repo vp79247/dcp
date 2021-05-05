@@ -136,6 +136,8 @@ class ModelNet40(Dataset):
 if __name__ == '__main__':
     train = ModelNet40(1024)
     test = ModelNet40(1024, 'test')
+    np.savetxt('train.csv',np.array(train),delimiter=",")
+    np.savetxt('test.csv',np.array(test),delimiter=",")
     for data in train:
         print(len(data))
         break
